@@ -46,5 +46,8 @@ if ($env:GIT_CONFIG_GLOBAL -ne "$env:USERPROFILE\.gitconfig")
 $env:WSLENV="WT_SESSION:WT_PROFILE_ID:USERPROFILE/p:"
 setx WSLENV "WT_SESSION:WT_PROFILE_ID:USERPROFILE/p:"
 
-# Start distro
+# Set distro as the new WSL Default
+wsl --set-default $distro
+
+# Start distro with default user setup script
 wsl -d $distro wsl-user-setup.sh

@@ -4,18 +4,34 @@ This is a sample WSL distribution of Red Hat Universal Base Image 9 with some sp
 
 - Adds various Region Stockholm and Inera SITHS certificate authorities to the trust store.
 - Installs and configures the following utilities:
-  - helm
-  - kubectl
-  - oc
-  - terraform
-  - vault
+  - `terraform`
+  - `vault`
+  - `helm`
+  - `kubectl`
+  - `oc` (requires download from Karolinska's test OpenShift cluster)
 - Sets up a default developer user (that's you who are using this in your envirnoment!)
-- Installs and configures [zsh](https://www.zsh.org/) as the default shell for the default users, plus adds [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) with the default theme.
-- Configures Git with the following defaults:
-  - `pull.rebase` is set to `false`
-  - default branch name for new repositories will be `main` instead of `master`
-  - `credential.helper` is added with the expectation that the Git For Windows Credential Manager is used and has a path of `C:\Program Files\Git\mingw64\bin\git-credential-manager.exe`
-- Assumes you have installed v0.3.X (v0.4.X is not currently compatible) of [wsl-vpnkit](https://github.com/sakai135/wsl-vpnkit) and subsequently configures it to be executed automatically when you open a new session of the RHEL9 WSL distrubtion.
+- Installs and configures [zsh](https://www.zsh.org/) as the default shell for this default user, plus adds [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) with the default theme.
+- Assumes you have installed v0.3.X (v0.4.X+ is not currently compatible) of [wsl-vpnkit](https://github.com/sakai135/wsl-vpnkit) and subsequently configures it to be executed automatically when you open a new session of the RHEL9 WSL distrubtion.
+- Assumes you have installed Git for Windows >= v2.39.0 and that you have set up all of your config as needed with Git for Windows including Git Credential Manager.
+
+## Git Integration
+
+This solution assumes that you will run all environments from one centrally-managed `.gitconfig` in Windows, that will then be referenced and occasionally copied depending on the scenario. Recommended settings for Git in Windows include the following:
+
+- `git config --global user.name "YourGithubUsername"`
+- `git config --global user.email "YourGithubSecureEmailAddress"`
+- `git config --global init.defaultbranch main`
+- `git config --global pull.rebase false`
+- You have authenticated at least once using `git` from Windows and successfully completed the browser-based authentication flow with Github (and thus have your credentials stored in Git Credential Manager).
+
+The path of Git Credential Manager is currently expected to be `C:\Program Files\Git\mingw64\bin\git-credential-manager.exe`, which is the default path for Git for Windows starting with v2.39.0 and higher.
+
+The following scenarios have been tested as working with no other intervention or login required by the user (assuming everything is set up and working in Windows):
+
+- Git CLI from Windows
+- Git CLI from this WSL distro (RHEL9)
+- VS Code launched from Windows, and opening one of the RHEL9-based "dev" containers from this repository using the [Dev Containers extension](https://code.visualstudio.com/docs/devcontainers/containers) (note this approach is not recommended by Microsoft due to file performance issues).
+- VS Code launched from this WSL distro (RHEL9), and again opening one of the RHEL9-based "dev" containers from this repository (this is the recommended approach from Microsoft).
 
 ## Installing
 
@@ -46,7 +62,7 @@ To use one of these images in VS Code, set the above image tags in the `.devcont
 
 ```json
 {
-	"name": "Java11",
+	"name": "java11",
 	"image": "rhelubi9:dev-java11"
 }
 ```

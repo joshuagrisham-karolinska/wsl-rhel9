@@ -17,7 +17,7 @@ RUN adduser -G wheel $USERNAME
 RUN curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | runuser -u $USERNAME -- sh -
 RUN chsh --shell /bin/zsh $USERNAME
 # Add username to zsh prompt
-RUN echo >> /home/$USERNAME/.zshrc && echo export PROMPT=\"\%\{\$fg\[cyan\]\%\}\%n\%\{\$reset_color\%\} \$PROMPT\" >> /home/$USERNAME/.zshrc
+RUN echo >> /home/$USERNAME/.zshrc && echo export PROMPT=$DEV_CONTAINER_ZSH_PROMPT >> /home/$USERNAME/.zshrc
 
 USER $USERNAME
 WORKDIR /home/$USERNAME

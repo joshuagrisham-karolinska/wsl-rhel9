@@ -11,7 +11,7 @@ set -e
 
 echo
 echo "Please create a default Linux user account. The username does not need to match your Windows username."
-echo "For mor information visit: https://aka.ms/wslusers"
+echo "For more information visit: https://aka.ms/wslusers"
 echo
 
 read -p "Enter new Linux username: " username
@@ -22,29 +22,24 @@ passwd $username
 
 cd /home/$username
 
-# Download and execute "oh my zsh" to set up zsh
+# Download and execute Oh My Zsh to set up zsh themes
 curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | runuser -u $username -- sh -
 # Change user's default shell to zsh
 chsh --shell /bin/zsh $username
 # Add username to zsh prompt
-echo >> /home/$username/.zshrc
-echo export PROMPT=\"\%\{\$fg\[cyan\]\%\}\%n\%\{\$reset_color\%\} \$PROMPT\" >> /home/$username/.zshrc
+echo export PROMPT=\"\%\{\$fg_bold\[green\]\%\}\%n\%\{\$reset_color\%\} \$PROMPT\" >> /home/$username/.zshrc
 
-# Let wsl-vpnkit always try to be started if it is not already running
-echo >> ~/.bashrc
-echo "# Let wsl-vpnkit always try to be started if it is not already running" >> ~/.bashrc
-echo "wsl.exe -d wsl-vpnkit --cd /app service wsl-vpnkit start 2>/dev/null" >> ~/.bashrc
-echo >> ~/.zshrc
-echo "# Let wsl-vpnkit always try to be started if it is not already running" >> ~/.zshrc
-echo "wsl.exe -d wsl-vpnkit --cd /app service wsl-vpnkit start 2>/dev/null" >> ~/.zshrc
-
-# Set up Git defaults
-runuser -u $username -- git config --global credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe"
-# Use Windows .gitconfig as default for entire WSL instance (both with bash and zsh)
-export GIT_CONFIG_SYSTEM=$USERPROFILE/.gitconfig
-echo "export GIT_CONFIG_SYSTEM=$USERPROFILE/.gitconfig" >> /etc/profile
-echo "export GIT_CONFIG_SYSTEM=$USERPROFILE/.gitconfig" >> /etc/zprofile
+# Replace user's $HOME/.gitconfig with a link to Windows .gitconfig (since $HOME/.gitconfig will always be copied and used when starting Dev Containers)
+runuser -u $username -- rm --force /home/$username/.gitconfig
+runuser -u $username -- ln --symbolic $USERPROFILE/.gitconfig /home/$username/.gitconfig
 
 # Start user's session
+echo
 echo "Welcome to Linux, $username!"
+echo "You have now been set as the default user for this instance."
+echo "This will take effect only after the instance has been restarted."
+echo
+echo "Please note that it might also be necessary to adjust Docker Desktop WSL Integration settings for this instance."
+echo
+
 su $username

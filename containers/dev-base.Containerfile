@@ -1,5 +1,7 @@
 FROM rhelubi9:base
 
+ENV DEV_CONTAINER_ZSH_PROMPT="\"%{\$fg_bold[yellow]%}%n%{\$reset_color%} \$PROMPT\""
+
 RUN dnf update -y \
         && \
     dnf install -y \
