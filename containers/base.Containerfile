@@ -6,6 +6,9 @@ RUN dnf update -y \
         && \
     dnf install -y \
         dnf-plugins-core \
+        procps-ng \
+        net-tools \
+        iproute \
         git \
         wget \
         man \
@@ -29,5 +32,3 @@ ADD http://pki.regionstockholm.se/aia/RSRSACA04l3v3.cer /cacerts/
 RUN for cer in /cacerts/*.cer; do openssl x509 -in $cer -outform PEM -out ${cer}.crt; done;
 RUN mkdir -p /usr/share/pki/ca-trust-source/anchors/ && cp /cacerts/*.crt /usr/share/pki/ca-trust-source/anchors/
 RUN update-ca-trust
-
-# docker build . -f ubi9.Containerfile -t ubi9:base

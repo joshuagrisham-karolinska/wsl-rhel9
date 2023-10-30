@@ -11,7 +11,7 @@ This is a sample WSL distribution of Red Hat Universal Base Image 9 with some sp
   - `oc` (requires download from Karolinska's test OpenShift cluster)
 - Sets up a default developer user (that's you who are using this in your envirnoment!)
 - Installs and configures [zsh](https://www.zsh.org/) as the default shell for this default user, plus adds [Oh My Zsh](https://github.com/ohmyzsh/ohmyzsh) with the default theme.
-- Assumes you have installed v0.3.X (v0.4.X+ is not currently compatible) of [wsl-vpnkit](https://github.com/sakai135/wsl-vpnkit) and subsequently configures it to be executed automatically when you open a new session of the RHEL9 WSL distrubtion.
+- Assumes you have installed v0.4.x+ of [wsl-vpnkit](https://github.com/sakai135/wsl-vpnkit) and configures the RHEL9 WSL distrubtion with a systemd service to keep it running in the background (as long as RHEL9 is running).
 - Assumes you have installed Git for Windows >= v2.39.0 and that you have set up all of your config as needed with Git for Windows including Git Credential Manager.
 
 ## Git Integration
