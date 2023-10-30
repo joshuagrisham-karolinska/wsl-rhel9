@@ -18,8 +18,8 @@ This is a sample WSL distribution of Red Hat Universal Base Image 9 with some sp
 
 This solution assumes that you will run all environments from one centrally-managed `.gitconfig` in Windows, that will then be referenced and occasionally copied depending on the scenario. Recommended settings for Git in Windows include the following:
 
-- `git config --global user.name "YourGithubUsername"`
-- `git config --global user.email "YourGithubSecureEmailAddress"`
+- `git config --global user.name "YourGithubUsername"` (your own actual Github username)
+- `git config --global user.email "YourGithubVisibleEmailAddress"` (your "visible" email address per your own [Github Email settings](https://github.com/settings/emails))
 - `git config --global init.defaultbranch main`
 - `git config --global pull.rebase false`
 - You have authenticated at least once using `git` from Windows and successfully completed the browser-based authentication flow with Github (and thus have your credentials stored in Git Credential Manager).

@@ -1,5 +1,31 @@
 $distro = "RHEL9"
 
+# Fix up Git Windows config file location
+if ($env:GIT_CONFIG_GLOBAL -ne "$env:USERPROFILE\.gitconfig")
+{
+    if ($env:HOMESHARE -ne $env:USERPROFILE)
+    {
+        Copy-Item -Path $env:HOMESHARE\.gitconfig -Destination $env:USERPROFILE\.gitconfig -Force
+        # If succeeded in copying the file to $env:USERPROFILE\.gitconfig then remove the original one at $env:HOMESHARE\.gitconfig
+        if (Test-Path $env:USERPROFILE\.gitconfig)
+        {
+            Remove-Item -Path $env:HOMESHARE\.gitconfig -Force
+        }
+    }
+    $env:GIT_CONFIG_GLOBAL="$env:USERPROFILE\.gitconfig"
+    setx GIT_CONFIG_GLOBAL "$env:USERPROFILE\.gitconfig"
+}
+
+if (!(Test-Path $env:USERPROFILE\.gitconfig))
+{
+    Throw "Could not find .gitconfig at '$env:USERPROFILE\.gitconfig'. The script will now exit."
+    Exit
+}
+
+# Pass GIT_CONFIG_GLOBAL to WSL so that Windows config will be used for Git (with /p to convert path)
+$env:WSLENV="WT_SESSION:WT_PROFILE_ID:GIT_CONFIG_GLOBAL/p:"
+setx WSLENV "WT_SESSION:WT_PROFILE_ID:GIT_CONFIG_GLOBAL/p:"
+
 # Build "base" RHEL9 UBI image
 docker build ./containers -f ./containers/base.Containerfile -t rhelubi9:base
 
@@ -31,23 +57,13 @@ $terminals = Get-Content $env:LOCALAPPDATA'\Packages\Microsoft.WindowsTerminal_8
 $terminals.profiles.list | % {if($_.name -eq $distro){$_.icon="$env:USERPROFILE\.wsl\$distro\redhat.png"}}
 $terminals | ConvertTo-Json -depth 32 | set-content $env:LOCALAPPDATA'\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json'
 
-# Fix up Git Windows config file location
-if ($env:GIT_CONFIG_GLOBAL -ne "$env:USERPROFILE\.gitconfig")
-{
-    if ($env:HOMESHARE -ne $env:USERPROFILE)
-    {
-        Copy-Item -Path $env:HOMESHARE\.gitconfig -Destination $env:USERPROFILE\.gitconfig -Force
-    }
-    $env:GIT_CONFIG_GLOBAL="$env:USERPROFILE\.gitconfig"
-    setx GIT_CONFIG_GLOBAL "$env:USERPROFILE\.gitconfig"
-}
-
-# Set USERPROFILE in WSL for use in various configs
-$env:WSLENV="WT_SESSION:WT_PROFILE_ID:USERPROFILE/p:"
-setx WSLENV "WT_SESSION:WT_PROFILE_ID:USERPROFILE/p:"
-
 # Set distro as the new WSL Default
 wsl --set-default $distro
 
 # Start distro with default user setup script
-wsl -d $distro wsl-user-setup.sh
+wsl --distribution $distro wsl-user-setup.sh
+
+# Restart distro so that the new default user will be set
+Write-Host "Restarting $distro..."
+wsl --terminate $distro
+wsl --distribution $distro

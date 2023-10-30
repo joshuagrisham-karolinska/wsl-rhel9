@@ -31,7 +31,7 @@ echo export PROMPT=\"\%\{\$fg_bold\[green\]\%\}\%n\%\{\$reset_color\%\} \$PROMPT
 
 # Replace user's $HOME/.gitconfig with a link to Windows .gitconfig (since $HOME/.gitconfig will always be copied and used when starting Dev Containers)
 runuser -u $username -- rm --force /home/$username/.gitconfig
-runuser -u $username -- ln --symbolic $USERPROFILE/.gitconfig /home/$username/.gitconfig
+runuser -u $username -- ln --symbolic $GIT_CONFIG_GLOBAL /home/$username/.gitconfig
 
 # Start user's session
 echo
@@ -41,5 +41,3 @@ echo "This will take effect only after the instance has been restarted."
 echo
 echo "Please note that it might also be necessary to adjust Docker Desktop WSL Integration settings for this instance."
 echo
-
-su $username
