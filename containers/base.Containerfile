@@ -9,11 +9,6 @@ RUN dnf update -y \
         procps-ng \
         net-tools \
         iproute \
-        git \
-        wget \
-        man \
-        passwd \
-        sudo \
         && \
     dnf clean all -y
 

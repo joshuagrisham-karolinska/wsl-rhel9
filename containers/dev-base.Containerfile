@@ -5,11 +5,16 @@ ENV DEV_CONTAINER_ZSH_PROMPT="\"%{\$fg_bold[yellow]%}%n%{\$reset_color%} \$PROMP
 RUN dnf update -y \
         && \
     dnf install -y \
-        powerline-fonts \
+        passwd \
+        sudo \
+        man \
         util-linux-user \
+        git \
+        wget \
         zsh \
         nano \
         crudini \
+        podman \
         && \
     dnf clean all -y
 

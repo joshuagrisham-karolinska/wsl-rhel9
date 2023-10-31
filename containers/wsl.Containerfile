@@ -1,4 +1,4 @@
-FROM rhelubi9:devbase
+FROM rhelubi9:dev-base
 
 # Enable systemd
 RUN crudini --set /etc/wsl.conf boot systemd true
