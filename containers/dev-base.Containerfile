@@ -11,6 +11,7 @@ RUN dnf update -y \
         util-linux-user \
         git \
         wget \
+        unzip \
         zsh \
         nano \
         crudini \
@@ -38,3 +39,12 @@ RUN tar xzf /tmp/helm/helm*.tar.gz -C /tmp/helm/ && \
 # Install HashiCorp stuff
 RUN dnf config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo && \
     dnf -y install terraform vault
+
+# Install awscli
+ADD https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip /tmp/awscli/
+RUN unzip /tmp/awscli/awscli-exe-linux-x86_64.zip -d /tmp/awscli/ && \
+    /tmp/awscli/aws/install && \
+    rm -rf /tmp/awscli
+
+# Add default .aws/config
+ADD /extras/aws.config /etc/skel/.aws/config

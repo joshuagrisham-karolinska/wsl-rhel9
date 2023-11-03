@@ -40,4 +40,5 @@ echo "You have now been set as the default user for this instance."
 echo "This will take effect only after the instance has been restarted."
 echo
 echo "Please note that it might also be necessary to adjust Docker Desktop WSL Integration settings for this instance."
+echo "You should also restart Docker Desktop to ensure that Docker integration will work properly."
 echo
