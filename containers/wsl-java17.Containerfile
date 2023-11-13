@@ -1,14 +1,17 @@
-FROM rhelubi9:dev-base
+FROM rhelubi9:wsl
 
-ARG USERNAME=java11
 ARG MAVEN_VERSION=3.9.5
 
 RUN dnf update -y \
         && \
     dnf install -y \
-        java-11-openjdk-headless \
+        java-17-openjdk-devel \
         && \
     dnf clean all -y
+
+# Add default MAVEN_ARGS to default profile
+RUN echo 'MAVEN_ARGS="--settings $MAVEN_SETTINGS"' >> /etc/profile && \
+    echo export MAVEN_ARGS >> /etc/profile
 
 # Install Maven
 ADD https://dlcdn.apache.org/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz /tmp/maven/
@@ -19,15 +22,3 @@ RUN tar xzf /tmp/maven/apache-maven-*.tar.gz -C /tmp/maven/ && \
     echo "export MAVEN_HOME=/opt/apache-maven" >> /etc/profile && \
     echo "export M2_HOME=\$MAVEN_HOME" >> /etc/profile && \
     echo "export M2=\$M2_HOME/bin" >> /etc/profile
-
-# Add dev username
-RUN adduser -G wheel $USERNAME
-
-# Add and configure zsh
-RUN curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | runuser -u $USERNAME -- sh -
-RUN chsh --shell /bin/zsh $USERNAME
-# Add username to zsh prompt
-RUN echo >> /home/$USERNAME/.zshrc && echo export PROMPT=$DEV_CONTAINER_ZSH_PROMPT >> /home/$USERNAME/.zshrc
-
-USER $USERNAME
-WORKDIR /home/$USERNAME

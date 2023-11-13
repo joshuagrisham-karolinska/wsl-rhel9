@@ -1,4 +1,12 @@
 $distro = "RHEL9"
+$imagetag = $args[0]
+
+if (!($imagetag))
+{
+    Throw "This script should be executed with a single parameter specifying a specific tag of the rhelubi9 you wish to install as your WSL instance. Please pass it as a parameter to this script or run one of the pre-built install script variants. The script will now exit."
+    Exit
+}
+
 
 # Fix up Git Windows config file location
 if ($env:GIT_CONFIG_GLOBAL -ne "$env:USERPROFILE\.gitconfig")
@@ -22,9 +30,25 @@ if (!(Test-Path $env:USERPROFILE\.gitconfig))
     Exit
 }
 
-# Pass GIT_CONFIG_GLOBAL to WSL so that Windows config will be used for Git (with /p to convert path)
-$env:WSLENV="WT_SESSION:WT_PROFILE_ID:GIT_CONFIG_GLOBAL/p:"
-setx WSLENV "WT_SESSION:WT_PROFILE_ID:GIT_CONFIG_GLOBAL/p:"
+# Fix up Maven Windows config file location (if mvn exists)
+if (Get-Command "mvn")
+{
+    if ($env:MAVEN_SETTINGS -ne "$env:USERPROFILE\.m2\settings.xml")
+    {
+        if (Test-Path $env:USERPROFILE\.m2\settings.xml)
+        {
+            $env:MAVEN_SETTINGS="$env:USERPROFILE\.m2\settings.xml"
+            setx MAVEN_SETTINGS "$env:USERPROFILE\.m2\settings.xml"
+            # Configure Maven Windows to always use this settings file
+            $env:MAVEN_ARGS="--settings $env:MAVEN_SETTINGS"
+            setx MAVEN_ARGS "--settings $env:MAVEN_SETTINGS"
+        }
+    }
+}
+
+# Pass GIT_CONFIG_GLOBAL and MAVEN_SETTINGS to WSL so that Windows config will be used for both (with /p to convert path)
+$env:WSLENV="GIT_CONFIG_GLOBAL/p:MAVEN_SETTINGS/p:"
+setx WSLENV "GIT_CONFIG_GLOBAL/p:MAVEN_SETTINGS/p:"
 
 # Build "base" RHEL9 UBI image
 docker build ./containers -f ./containers/base.Containerfile -t rhelubi9:base
@@ -35,6 +59,9 @@ docker build ./containers -f ./containers/dev-base.Containerfile -t rhelubi9:dev
 # Build "wsl" RHEL9 UBI image
 docker build ./containers -f ./containers/wsl.Containerfile -t rhelubi9:wsl
 
+# Build "wsl-java17" RHEL9 UBI image
+docker build ./containers -f ./containers/wsl-java17.Containerfile -t rhelubi9:wsl-java17
+
 # Remove distro if it already exists
 wsl --unregister $distro
 rm "$env:USERPROFILE\.wsl\$distro" -r -force
@@ -44,7 +71,7 @@ mkdir "$env:USERPROFILE\.wsl\$distro"
 cp redhat.png $env:USERPROFILE\.wsl\$distro\
 
 # Create a temporary container and export its filesystem to a tar
-$containerid=$(docker create rhelubi9:wsl)
+$containerid=$(docker create rhelubi9:$imagetag)
 docker export $containerid --output $env:USERPROFILE\.wsl\$distro\rhelubi9-wsl.tar
 docker container rm $containerid
 Remove-Variable -Name containerid

@@ -33,6 +33,13 @@ echo export PROMPT=\"\%\{\$fg_bold\[green\]\%\}\%n\%\{\$reset_color\%\} \$PROMPT
 runuser -u $username -- rm --force /home/$username/.gitconfig
 runuser -u $username -- ln --symbolic $GIT_CONFIG_GLOBAL /home/$username/.gitconfig
 
+# Remove user's Maven $HOME/.m2/settings.xml and create profile script to always copy the Windows file in each session (so it can be mounted to child containers)
+if [ -n "${MAVEN_SETTINGS}" ]; then
+    runuser -u $username -- rm --force /home/$username/.m2/settings.xml
+    runuser -u $username -- mkdir -p /home/$username/.m2
+    echo "cp $MAVEN_SETTINGS /home/$username/.m2/settings.xml" >> /etc/profile
+fi
+
 # Start user's session
 echo
 echo "Welcome to Linux, $username!"
