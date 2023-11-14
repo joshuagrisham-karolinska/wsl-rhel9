@@ -37,7 +37,9 @@ The following scenarios have been tested as working with no other intervention o
 
 Fetch, import, and start [wsl-vpnkit](https://github.com/sakai135/wsl-vpnkit) by running the script [install-vpnkit.ps1](./install-vpnkit.ps1).
 
-Build and install the "RHEL9" WSL distribution by running the script [install.ps1](./install.ps1).
+Build and install the "RHEL9" WSL distribution by running one of the following scripts depending on your needs:
+-  [install-wsl.ps1](./install-wsl.ps1) (Base WSL image)
+-  [install-wsl-java17.ps1](./install-wsl-java17.ps1) (Base + JDK 17 and Maven)
 
 > **NOTE:** This script will wipe and remove any existing distribution with the name "RHEL9" distrubution if you already have one!
 
