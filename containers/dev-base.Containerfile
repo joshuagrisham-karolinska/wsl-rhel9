@@ -16,6 +16,7 @@ RUN dnf update -y \
         nano \
         crudini \
         podman \
+        jq \
         && \
     dnf clean all -y
 
