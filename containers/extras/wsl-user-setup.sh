@@ -37,7 +37,7 @@ runuser -u $username -- ln --symbolic $GIT_CONFIG_GLOBAL /home/$username/.gitcon
 if [ -n "${MAVEN_SETTINGS}" ]; then
     runuser -u $username -- rm --force /home/$username/.m2/settings.xml
     runuser -u $username -- mkdir -p /home/$username/.m2
-    echo "cp $MAVEN_SETTINGS /home/$username/.m2/settings.xml" >> /etc/profile
+    echo "cp --force \$MAVEN_SETTINGS /home/$username/.m2/settings.xml" >> /home/$username/.zshrc
 fi
 
 # Start user's session

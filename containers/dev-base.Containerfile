@@ -25,6 +25,11 @@ ADD https://dl.k8s.io/release/v1.28.3/bin/linux/amd64/kubectl /tmp/
 RUN install -o root -g root -m 0755 /tmp/kubectl /usr/local/bin/kubectl && \
     rm -f /tmp/kubectl
 
+# Install kind
+ADD https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64 /tmp/kind
+RUN install -o root -g root -m 0755 /tmp/kind /usr/local/bin/kind && \
+    rm -f /tmp/kind
+
 # Install oc
 ADD https://downloads-openshift-console.apps.tamarin.mta.karolinska.se/amd64/linux/oc.tar /tmp/
 RUN tar xf /tmp/oc.tar -C /tmp/ && \
