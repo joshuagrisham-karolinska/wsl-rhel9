@@ -9,6 +9,8 @@ RUN dnf update -y \
         sudo \
         man \
         util-linux-user \
+        iputils \
+        openldap-clients \
         git \
         wget \
         unzip \
@@ -54,3 +56,5 @@ RUN unzip /tmp/awscli/awscli-exe-linux-x86_64.zip -d /tmp/awscli/ && \
 
 # Add default .aws/config
 ADD /extras/aws.config /etc/skel/.aws/config
+# And remove Windows line endings from it in case it has them
+RUN sh -c '<<< "$(< /etc/skel/.aws/config)" tr -d "\r" > /etc/skel/.aws/config'

@@ -8,6 +8,8 @@ RUN git config --system credential.helper "/mnt/c/Program\ Files/Git/mingw64/bin
 
 # Add container extras
 ADD extras /etc/extras
+# Strip Windows line endings from files just in case they have them
+RUN find /etc/extras -type f -exec bash -c '<<< "$(< {})" tr -d "\r" > {}' \;
 # Copy extra scripts to /usr/local/bin/
 RUN chmod +x /etc/extras/*.sh && cp /etc/extras/*.sh /usr/local/bin/
 # Add and enable wsl-vpnkit service
