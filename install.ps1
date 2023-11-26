@@ -88,9 +88,17 @@ $terminals | ConvertTo-Json -depth 32 | set-content $env:LOCALAPPDATA'\Packages\
 wsl --set-default $distro
 
 # Start distro with default user setup script
-wsl --distribution $distro wsl-user-setup.sh
+wsl --distribution $distro /etc/extras/wsl-user-setup.sh
 
-# Restart distro so that the new default user will be set
-Write-Host "Restarting $distro..."
-wsl --terminate $distro
+# Shutdown entire WSL to help avoid issues with wsl-vpnkit failing to start the first time with the error:
+#  "cannot create tap device: ioctl: device or resource busy"
+Write-Host "Please note that it might be necessary to adjust Docker Desktop WSL Integration settings for this distribution."
+Write-Host "You may also need to restart Docker Desktop to ensure that Docker integration will work properly."
+Write-Host
+Write-Host 'If you see further "cannot create tap device: ioctl: device or resource busy" errors from wsl-vpnkit then it can'
+Write-Host 'be helpful to restart WSL or even your entire Windows environment.'
+Write-Host
+Write-Host "Shutting down all WSL distributions..."
+wsl --shutdown
+Write-Host "Starting $distro..."
 wsl --distribution $distro
