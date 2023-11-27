@@ -22,12 +22,8 @@ passwd $username
 
 cd /home/$username
 
-# Download and execute Oh My Zsh to set up zsh themes
-curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh | runuser -u $username -- sh -
-# Change user's default shell to zsh
-chsh --shell /bin/zsh $username
-# Add username to zsh prompt
-echo export PROMPT=\"\%\{\$fg_bold\[green\]\%\}\%n\%\{\$reset_color\%\} \$PROMPT\" >> /home/$username/.zshrc
+# Set a nice blue and green prompt
+echo 'export PS1="\[\e[36m\]\u@\h\[\e[32m\]:\$PWD\[\e[m\]\$ "' >> /home/$username/.bashrc
 
 # Replace user's $HOME/.gitconfig with a link to Windows .gitconfig (since $HOME/.gitconfig will always be copied and used when starting Dev Containers)
 runuser -u $username -- rm --force /home/$username/.gitconfig
