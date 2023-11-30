@@ -1,7 +1,5 @@
 FROM rhelubi9:base
 
-ENV DEV_CONTAINER_ZSH_PROMPT="\"%{\$fg_bold[yellow]%}%n%{\$reset_color%} \$PROMPT\""
-
 RUN dnf update -y \
         && \
     dnf install -y \
@@ -54,7 +52,13 @@ RUN unzip /tmp/awscli/awscli-exe-linux-x86_64.zip -d /tmp/awscli/ && \
     /tmp/awscli/aws/install && \
     rm -rf /tmp/awscli
 
-# Add default .aws/config
-ADD /extras/aws.config /etc/skel/.aws/config
-# And remove Windows line endings from it in case it has them
-RUN sh -c '<<< "$(< /etc/skel/.aws/config)" tr -d "\r" > /etc/skel/.aws/config'
+# Add container extras
+ADD extras /etc/extras
+# Strip Windows line endings from files just in case they have them
+RUN find /etc/extras -type f -exec bash -c '<<< "$(< {})" tr -d "\r" > {}' \;
+# Ensure extra scripts can be executed
+RUN chmod +x /etc/extras/*.sh
+# Add default user profile config files (directly using /bin/cp to avoid problems with "cp -i" alias)
+RUN /bin/cp -rfT /etc/extras/skel /etc/skel
+# Add profile scripts (again using /bin/cp to force without prompt)
+RUN /bin/cp -rfT /etc/extras/profile.d /etc/profile.d
