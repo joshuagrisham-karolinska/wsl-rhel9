@@ -52,6 +52,11 @@ RUN unzip /tmp/awscli/awscli-exe-linux-x86_64.zip -d /tmp/awscli/ && \
     /tmp/awscli/aws/install && \
     rm -rf /tmp/awscli
 
+# Install yq
+ADD https://github.com/mikefarah/yq/releases/download/v4.40.3/yq_linux_amd64 /tmp/
+RUN install -o root -g root -m 0755 /tmp/yq_linux_amd64 /usr/local/bin/yq && \
+    rm -f /tmp/yq_linux_amd64
+
 # Add container extras
 ADD extras /etc/extras
 # Strip Windows line endings from files just in case they have them
