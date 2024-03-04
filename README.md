@@ -11,6 +11,8 @@ This is a sample WSL distribution of Red Hat Universal Base Image 9 with some sp
   - `oc` (requires download from Karolinska's test OpenShift cluster)
 - Sets up a default developer user (that's you who are using this in your envirnoment!)
 - Installs and configures [zsh](https://www.zsh.org/) as the default shell for this default user, plus adds [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) with some extra plugins depending on response to a few prompts.
+- Assumes you are running WSL version 2.0.14.0 or later.
+- Assumes you are NOT running version 4.27.x of Docker Desktop, because it contains a bug preventing installation. Both earlier versions, as in 4.26.x and below, and later versions from 4.28.x, works well.
 - Assumes you have installed v0.4.x+ of [wsl-vpnkit](https://github.com/sakai135/wsl-vpnkit) and configures the RHEL9 WSL distrubtion with a systemd service to keep it running in the background as long as RHEL9 is running (see [Installing](#installing) below).
 - Assumes you have installed [Git for Windows](https://git-scm.com/download/win) >= v2.39.0 and that you have set up all of your config as needed with Git for Windows including Git Credential Manager.
 
