@@ -57,7 +57,20 @@ docker build ./containers -f ./containers/base.Containerfile -t rhelubi9:base
 docker build ./containers -f ./containers/dev-base.Containerfile -t rhelubi9:dev-base
 
 # Build "wsl" RHEL9 UBI image
-docker build ./containers -f ./containers/wsl.Containerfile -t rhelubi9:wsl
+# First try to get the right path to git-credential-manager.exe and provide it as a build arg
+$gitCredentialManagerWslPath = "/mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe" # default path if not set below
+$gitCredentialManagerPath = ((Get-Command git.exe).Path -replace "\\[\w]{0,}\\git\.exe", "") + "\mingw64\bin\git-credential-manager.exe"
+if (Get-Command $gitCredentialManagerPath) {
+    $gitCredentialManagerWslPath = $gitCredentialManagerPath.replace("C:", "/mnt/c").replace("\", "/").replace(" ", "\ ")
+    Write-Host
+    $gitCredentialManagerUserPath = Read-Host -Prompt "What path should WSL use for git-credential-manager.exe? [$gitCredentialManagerWslPath]"
+    Write-Host
+    if (![string]::IsNullOrWhiteSpace($gitCredentialManagerUserPath))
+    {
+        $gitCredentialManagerWslPath = $gitCredentialManagerUserPath
+    }
+}
+docker build ./containers -f ./containers/wsl.Containerfile --build-arg="GIT_CREDENTIAL_MANAGER_PATH=$gitCredentialManagerWslPath" -t rhelubi9:wsl
 
 # Build "wsl-java17" RHEL9 UBI image
 docker build ./containers -f ./containers/wsl-java17.Containerfile -t rhelubi9:wsl-java17
@@ -71,7 +84,7 @@ mkdir "$env:USERPROFILE\.wsl\$distro"
 cp redhat.png $env:USERPROFILE\.wsl\$distro\
 
 # Create a temporary container and export its filesystem to a tar
-$containerid=$(docker create rhelubi9:$imagetag)
+$containerid=$(docker create rhelubi9:$imagetag | Select-Object -Last 1)
 docker export $containerid --output $env:USERPROFILE\.wsl\$distro\rhelubi9-wsl.tar
 docker container rm $containerid
 Remove-Variable -Name containerid
@@ -81,7 +94,7 @@ wsl --import $distro --version 2 "$env:USERPROFILE\.wsl\$distro" $env:USERPROFIL
 
 # Update Windows Terminal profile with icon
 $terminals = Get-Content $env:LOCALAPPDATA'\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json' -raw | ConvertFrom-Json
-$terminals.profiles.list | % {if($_.name -eq $distro){$_.icon="$env:USERPROFILE\.wsl\$distro\redhat.png"}}
+$terminals.profiles.list | % {if($_.name -eq $distro){$_ | Add-Member -Force -Type NoteProperty -Name "icon" -Value "$env:USERPROFILE\.wsl\$distro\redhat.png"}}
 $terminals | ConvertTo-Json -depth 32 | set-content $env:LOCALAPPDATA'\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json'
 
 # Set distro as the new WSL Default

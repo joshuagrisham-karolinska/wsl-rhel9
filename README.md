@@ -2,6 +2,7 @@
 
 This is a sample WSL distribution of Red Hat Universal Base Image 9 with some specific configurations for usage at Karolinska Hospital:
 
+- Assumes you are connected to the Region Stockholm network (VPN or on-site) in order to download certain resources.
 - Adds various Region Stockholm and Inera SITHS certificate authorities to the trust store.
 - Installs and configures the following utilities:
   - `terraform`
@@ -13,6 +14,25 @@ This is a sample WSL distribution of Red Hat Universal Base Image 9 with some sp
 - Installs and configures [zsh](https://www.zsh.org/) as the default shell for this default user, plus adds [Oh My Zsh!](https://github.com/ohmyzsh/ohmyzsh) with some extra plugins depending on response to a few prompts.
 - Assumes you have installed v0.4.x+ of [wsl-vpnkit](https://github.com/sakai135/wsl-vpnkit) and configures the RHEL9 WSL distrubtion with a systemd service to keep it running in the background as long as RHEL9 is running (see [Installing](#installing) below).
 - Assumes you have installed [Git for Windows](https://git-scm.com/download/win) >= v2.39.0 and that you have set up all of your config as needed with Git for Windows including Git Credential Manager.
+
+## WSL Setup
+
+Make sure you have at least WSL version 2.0.14.0 or higher.
+
+Check the WSL version using the command `wsl --version`.
+
+```bat
+> wsl --version
+WSL-version: 2.0.14.0
+Kernelversion: 5.15.133.1-1
+WSLg-version: 1.0.59
+MSRDC-version: 1.2.4677
+Direct3D-version: 1.611.1-81528511
+DXCore-version: 10.0.25131.1002-220531-1700.rs-onecore-base2-hyp
+Windows-version: 10.0.19045.3803
+```
+
+Upgrade WSL if it is not at least 2.0.14.0 from Microsoft Store or with the command `wsl --upgrade`.
 
 ## Git Setup
 

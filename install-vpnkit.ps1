@@ -12,7 +12,3 @@ wsl --import wsl-vpnkit --version 2 $env:USERPROFILE\.wsl\wsl-vpnkit $env:USERPR
 # enable [automount] in wsl.conf for wsl-vpnkit distro and kill it so that it will restart correctly
 wsl --distribution wsl-vpnkit --cd /app sed -i '/^\[automount\]$/,/^\[/ s/^enabled[ ]\{0,\}=.*/enabled=true/' /etc/wsl.conf
 wsl --terminate wsl-vpnkit
-
-# copy wsl-gvproxy.exe to C:\git (otherwise it will be blocked by AppLocker)
-mkdir "C:\git\wsl-vpnkit"
-wsl --distribution wsl-vpnkit cp /app/wsl-gvproxy.exe /mnt/c/git/wsl-vpnkit/
