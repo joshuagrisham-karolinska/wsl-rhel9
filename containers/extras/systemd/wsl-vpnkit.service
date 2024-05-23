@@ -6,8 +6,7 @@ After=network.target
 
 [Service]
 # for wsl-vpnkit setup as a distro
-# set GVPROXY_PATH to the copy of wsl-gvproxy.exe that install-vpnkit.ps1 creates in C:\git\wsl-vpnkit\
-ExecStart=/mnt/c/Windows/system32/wsl.exe -d wsl-vpnkit --cd /app GVPROXY_PATH=/mnt/c/git/wsl-vpnkit/wsl-gvproxy.exe wsl-vpnkit
+ExecStart=/mnt/c/Windows/system32/wsl.exe -d wsl-vpnkit --cd /app wsl-vpnkit
 
 # for wsl-vpnkit setup as a standalone script
 #ExecStart=/full/path/to/wsl-vpnkit
