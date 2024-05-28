@@ -17,6 +17,8 @@ RUN dnf update -y \
         crudini \
         podman \
         jq \
+        npm \
+        nmap \
         && \
     dnf clean all -y
 
@@ -61,6 +63,9 @@ RUN install -o root -g root -m 0755 /tmp/yq_linux_amd64 /usr/local/bin/yq && \
 ADD https://openpolicyagent.org/downloads/v0.62.1/opa_linux_amd64_static /tmp/
 RUN install -o root -g root -m 0755 /tmp/opa_linux_amd64_static /usr/local/bin/opa && \
     rm -f /tmp/opa_linux_amd64_static
+
+# Install nodejs version compatible with app-doc
+RUN dnf -y module install -y nodejs:20/common
 
 # Add container extras
 ADD extras /etc/extras
