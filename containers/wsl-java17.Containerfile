@@ -1,6 +1,6 @@
 FROM rhelubi9:wsl
 
-ARG MAVEN_VERSION=3.9.5
+ARG MAVEN_VERSION=3.9.7
 ARG TINKEY_VERSION=1.10.1
 
 RUN dnf update -y \

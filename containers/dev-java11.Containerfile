@@ -1,7 +1,7 @@
 FROM rhelubi9:dev-base
 
 ARG USERNAME=java11
-ARG MAVEN_VERSION=3.9.5
+ARG MAVEN_VERSION=3.9.7
 
 RUN dnf update -y \
         && \

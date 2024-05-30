@@ -51,17 +51,18 @@ if [ "${WITHEXTRAPLUGINS}" = "1" ]; then
     echo
 
     # Add these plugins to user's .zshrc
+    # Note that the order kind of matters, otherwise you can get error messages (https://github.com/zsh-users/zsh-syntax-highlighting/issues/951)
     cat <<EOF >> $HOME/.zshrc
 
 plugins=(
-  zsh-autocomplete
-  zsh-autosuggestions
-  fast-syntax-highlighting
   git
   docker
   helm
   kubectl
   oc
+  fast-syntax-highlighting
+  zsh-autosuggestions
+  zsh-autocomplete
 )
 EOF
 

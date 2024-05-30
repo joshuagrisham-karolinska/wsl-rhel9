@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/ubi:9.2-755.1697625012
+FROM registry.access.redhat.com/ubi9/ubi:9.4-947.1716476138
 
 RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm
 

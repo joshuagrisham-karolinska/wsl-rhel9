@@ -23,12 +23,12 @@ RUN dnf update -y \
     dnf clean all -y
 
 # Install kubectl
-ADD https://dl.k8s.io/release/v1.28.3/bin/linux/amd64/kubectl /tmp/
+ADD https://dl.k8s.io/release/v1.30.1/bin/linux/amd64/kubectl /tmp/
 RUN install -o root -g root -m 0755 /tmp/kubectl /usr/local/bin/kubectl && \
     rm -f /tmp/kubectl
 
 # Install kind
-ADD https://kind.sigs.k8s.io/dl/v0.20.0/kind-linux-amd64 /tmp/kind
+ADD https://kind.sigs.k8s.io/dl/v0.23.0/kind-linux-amd64 /tmp/kind
 RUN install -o root -g root -m 0755 /tmp/kind /usr/local/bin/kind && \
     rm -f /tmp/kind
 
@@ -39,7 +39,7 @@ RUN tar xf /tmp/oc.tar -C /tmp/ && \
     rm -f /tmp/oc*
 
 # Install helm
-ADD https://get.helm.sh/helm-v3.13.1-linux-amd64.tar.gz /tmp/helm/
+ADD https://get.helm.sh/helm-v3.15.1-linux-amd64.tar.gz /tmp/helm/
 RUN tar xzf /tmp/helm/helm*.tar.gz -C /tmp/helm/ && \
     cp /tmp/helm/linux-amd64/helm /usr/local/bin/helm && \
     rm -rf /tmp/helm
@@ -55,12 +55,12 @@ RUN unzip /tmp/awscli/awscli-exe-linux-x86_64.zip -d /tmp/awscli/ && \
     rm -rf /tmp/awscli
 
 # Install yq
-ADD https://github.com/mikefarah/yq/releases/download/v4.40.3/yq_linux_amd64 /tmp/
+ADD https://github.com/mikefarah/yq/releases/download/v4.44.1/yq_linux_amd64 /tmp/
 RUN install -o root -g root -m 0755 /tmp/yq_linux_amd64 /usr/local/bin/yq && \
     rm -f /tmp/yq_linux_amd64
 
 # Install opa
-ADD https://openpolicyagent.org/downloads/v0.62.1/opa_linux_amd64_static /tmp/
+ADD https://openpolicyagent.org/downloads/v0.64.1/opa_linux_amd64_static /tmp/
 RUN install -o root -g root -m 0755 /tmp/opa_linux_amd64_static /usr/local/bin/opa && \
     rm -f /tmp/opa_linux_amd64_static
 
