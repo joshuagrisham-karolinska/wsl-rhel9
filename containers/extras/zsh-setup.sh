@@ -63,6 +63,7 @@ plugins=(
   fast-syntax-highlighting
   zsh-autosuggestions
   zsh-autocomplete
+  ssh-agent
 )
 EOF
 

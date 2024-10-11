@@ -13,6 +13,7 @@ RUN dnf update -y \
         wget \
         unzip \
         zsh \
+        vim \
         nano \
         crudini \
         podman \
